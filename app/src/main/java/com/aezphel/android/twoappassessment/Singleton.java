@@ -24,6 +24,9 @@ public class Singleton {
     }
 
     public void addPage(int position){
+        if(pageArray.size() == 0)
+            pageArray.add(new PageInformation());
+        else
         pageArray.add(position, new PageInformation());
     }
 

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,37 +42,64 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         addBtn = actionView.findViewById(R.id.addBtn);
         delBtn = actionView.findViewById(R.id.deleteBtn);
-
         prevBtn = findViewById(R.id.prevBtn);
         nextBtn = findViewById(R.id.nextBtn);
+        validateButtons();
         addBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"Add button clicked");
-                int pos = viewPager.getCurrentItem();
-                Log.d(TAG, "ViewPager Pos: " + pos);
-                single.addPage(pos+1);
-                Log.d(TAG, "ViewPager: Added ");
+                single.addPage(viewPager.getCurrentItem()+1);
                 adapter.notifyDataSetChanged();
-                viewPager.setCurrentItem(pos+1);
+                Log.d(TAG,"position: " + viewPager.getCurrentItem());
+                if(single.getPageArray().size() == 1) {
+                    viewPager.setCurrentItem(0);
+                }
+                else {
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                }
+                validateButtons();
             }
         });
         delBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Delete button clicked");
+                if(single.getPageArray().size() > 0){
+                    single.removePage(viewPager.getCurrentItem());
+                    adapter.notifyDataSetChanged();
+                    validateButtons();
+                    if(single.getPageArray().size() > 0)
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
+                    else
+                        viewPager.setCurrentItem(0);
+                } else
+                    Toast.makeText(getApplicationContext(),R.string.del_feedback, Toast.LENGTH_SHORT).show();
+
             }
         });
         prevBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Previous button clicked");
+                if(viewPager.getCurrentItem() == 0 || single.getPageArray().size() == 0){
+                    validateButtons();
+                } else {
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+                    validateButtons();
+                }
             }
         });
         nextBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Next button clicked");
+                if(viewPager.getCurrentItem() == single.getPageArray().size()-1 || single.getPageArray().size() == 0){
+                    validateButtons();
+                } else {
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                    validateButtons();
+                }
             }
         });
     }
@@ -97,6 +125,32 @@ public class MainActivity extends AppCompatActivity {
         public int getItemPosition(@NonNull Object object) {
             return POSITION_NONE;
             //return super.getItemPosition(object);
+        }
+    }
+
+    private void validateButtons(){
+        if(single.getPageArray().size() == 0 || single.getPageArray().size() == 1){
+            prevBtn.setEnabled(false);
+            prevBtn.setAlpha(0.5f);
+            nextBtn.setEnabled(false);
+            nextBtn.setAlpha(0.5f);
+        } else if(single.getPageArray().size() > 1){
+            if(viewPager.getCurrentItem() == single.getPageArray().size() - 1){
+                nextBtn.setEnabled(false);
+                nextBtn.setAlpha(0.5f);
+                prevBtn.setEnabled(true);
+                prevBtn.setAlpha(1.0f);
+            } else if(viewPager.getCurrentItem() < 1){
+                prevBtn.setEnabled(false);
+                prevBtn.setAlpha(0.5f);
+                nextBtn.setEnabled(true);
+                nextBtn.setAlpha(1.0f);
+            } else {
+                prevBtn.setEnabled(true);
+                prevBtn.setAlpha(1.0f);
+                nextBtn.setEnabled(true);
+                nextBtn.setAlpha(1.0f);
+            }
         }
     }
 }
