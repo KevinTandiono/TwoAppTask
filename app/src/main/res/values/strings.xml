@@ -8,4 +8,5 @@
     <string name="next">Next page</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="del_feedback">Nothing to delete</string>
+    <string name="no_page">No Page Added</string>
 </resources>

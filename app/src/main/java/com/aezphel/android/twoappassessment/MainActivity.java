@@ -1,6 +1,5 @@
 package com.aezphel.android.twoappassessment;
 
-import android.app.ActionBar;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +7,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -28,20 +29,25 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<WebViewFragment> fragmentList = new ArrayList<>();
     private ArrayList<PageInformation> pages = new ArrayList<>();
     private Singleton single;
+    private Toolbar toolbar;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.actionbar_custom);
-        View actionView = getSupportActionBar().getCustomView();
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         single = Singleton.getInstance();
         viewPager = findViewById(R.id.viewPager);
         adapter = new FragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-        addBtn = actionView.findViewById(R.id.addBtn);
-        delBtn = actionView.findViewById(R.id.deleteBtn);
+        addBtn = findViewById(R.id.addBtn);
+        delBtn = findViewById(R.id.deleteBtn);
         prevBtn = findViewById(R.id.prevBtn);
         nextBtn = findViewById(R.id.nextBtn);
         validateButtons();

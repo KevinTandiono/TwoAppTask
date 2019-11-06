@@ -28,7 +28,7 @@ public class WebViewFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_web_view, container, false);
         WebView webview = v.findViewById(R.id.webView);
         String html = "<html><head>"
-                + "<style type=\"text/css\">body{color:" + color + ";}"
+                + "<style type=\"text/css\">body{font-size: 200%; color:" + color + "; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);}"
                 + "</style></head>"
                 + "<body>"
                 + letter
